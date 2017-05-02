@@ -1,0 +1,25 @@
+{
+  "name": "@erchaves/sugarcone",
+  "description": "Universal rendering with Dust.js in Express.js as well as client side.",
+  "private": true,
+  "version": "0.0.1",
+  "author": "Eric Chaves <erchaves@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "adaro": "^1.0.4",
+    "dustjs-linkedin": "^2.7.5",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-dust": "^3.0.0",
+    "gulp-tap": "^0.4.2",
+    "stream-series": "^0.1.1"
+  },
+  "bugs": {
+    "url": "https://github.com/erchaves/sugarcone/issues"
+  },
+  "homepage": "https://github.com/erchaves/sugarcone#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erchaves/sugarcone"
+  }
+}

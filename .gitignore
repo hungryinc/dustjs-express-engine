@@ -1,0 +1,17 @@
+# Environment vars
+.env
+
+# Build
+dist
+lib
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directory
+node_modules
+
+# Temporal files
+.DS_Store

@@ -1,0 +1,28 @@
+# Source
+src
+
+# Tests
+tests
+
+# Temporal files
+.DS_Store
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Dependency directory
+node_modules
+
+# Configurations
+.editorconfig
+.eslintignore
+.eslintrc.json
+.flowconfig
+.gitignore
