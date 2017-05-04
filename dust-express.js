@@ -11,7 +11,6 @@ const dustSetup = require(config.dustSetupPath);
 const dustOptions = {
   helpers: [
     function (dust) {
-      console.log('setting up!!');
       dustSetup(dust, config.isDebug);
     },
   ],

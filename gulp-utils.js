@@ -6,7 +6,8 @@ const path = require('path');
 const streamSeries = require('stream-series');
 
 const fileExtRegex = /\.[^/.]+$/;
-// todo: use same as back-end?
+
+// todo: is there a nicer way to get this?
 const pathDust = 'node_modules/dustjs-linkedin/dist/dust-core.min.js';
 
 module.exports = function(options) {
@@ -35,14 +36,12 @@ module.exports = function(options) {
     pageModules: `${paths.pageModules}/*.js`,
   };
 
-  const configFileContents = `{"isDebug": ${isDebug}}`;
-
   const getDustExpressHeader = function() {
     return `const _config = {"isDebug": ${isDebug}, "dustSetupPath": '${paths.dustSetup}', }`;
   };
 
   // Read the pages directory and create a dictionary of pageModules.
-  var taskPageModules = function () {
+  const taskPageModules = function () {
     return gulp.src(globs.pageModules)
       .pipe(tap(function(file) {
         var fileName = path.basename(file.path, '.js');
@@ -56,7 +55,7 @@ module.exports = function(options) {
       .pipe(gulp.dest(paths.sugarconeDist));
   };
 
-  var getDustPartials = function () {
+  const getDustPartials = function () {
     return gulp.src(globs.partials)
       .pipe(dust({
         name: file => {
@@ -71,18 +70,18 @@ module.exports = function(options) {
       }));
   };
 
-  var taskDustBuild = function () {
-    var dustSetup = gulp.src(paths.dustSetup);
-    var dustSrc = gulp.src(paths.dust);
-    var dustPartials = getDustPartials();
+  const taskDustBuild = function () {
+    const dustSetup = gulp.src(paths.dustSetup);
+    const dustSrc = gulp.src(paths.dust);
+    const dustPartials = getDustPartials();
 
     return streamSeries(dustSrc, dustSetup, dustPartials)
       .pipe(concat(`${dustBuildFileName}.js`))
       .pipe(gulp.dest(paths.sugarconeDist));
   };
 
-  var taskDustExpress = function () {
-    var header = getDustExpressHeader(paths.dist);
+  const taskDustExpress = function () {
+    const header = getDustExpressHeader(paths.dist);
 
     return gulp.src(path.join(__dirname, 'dust-express.js'))
       .pipe(tap(function(file, t) {
@@ -95,8 +94,8 @@ module.exports = function(options) {
       .pipe(gulp.dest(paths.sugarconeDist));
   };
 
-  var taskHtml = function () {
-    var process = gulp.src(globs.views)
+  const taskHtml = function () {
+    const process = gulp.src(globs.views)
       .pipe(dust({
         config: {
             // the dust whitespace parser is broken https://github.com/linkedin/dustjs/issues/238
@@ -109,11 +108,15 @@ module.exports = function(options) {
       return process;
   };
 
+  const runTasks = function() {
+    taskPageModules();
+    taskDustBuild();
+    taskDustExpress();
+    taskHtml();
+  };
+
   return {
-    taskPageModules: taskPageModules,
-    taskDustBuild: taskDustBuild,
-    taskDustExpress: taskDustExpress,
-    taskHtml: taskHtml,
+    task: runTasks,
     globs: globs,
   };
 };

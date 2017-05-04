@@ -3,12 +3,17 @@ const dustRender = require('./dust-render');
 const bootstrap = require('./bootstrap');
 const app = require('./app');
 
-module.exports = {
-  app: app,
-  bootstrap: bootstrap,
-  dustRender: dustRender,
-  getGulpDust: function () {
-    // this needs to be protected in this function wrap to prevent errors
-    return require('./gulp-task-dust');
-  },
-};
+const isNode = process && process.release && process.release.name === 'node';
+
+if (isNode) {
+  module.exports = {
+    //Note: this causes an error if loaded in a non-node environment (like a browser).
+    gulpUtils: require('./gulp-utils'),
+  };
+} else {
+  module.exports = {
+    app: app,
+    bootstrap: bootstrap,
+    dustRender: dustRender,
+  };
+}
