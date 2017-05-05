@@ -4,6 +4,7 @@ const dust = require('gulp-dust');
 const tap = require('gulp-tap');
 const path = require('path');
 const streamSeries = require('stream-series');
+const escapeFilename = require('./utils').escapeFilename;
 
 const fileExtRegex = /\.[^/.]+$/;
 
@@ -44,8 +45,8 @@ module.exports = function(options) {
   const taskPageModules = function () {
     return gulp.src(globs.pageModules)
       .pipe(tap(function(file) {
-        var fileName = path.basename(file.path, '.js');
-        const pageModuleExportString = `export {default as ${fileName}} from '${paths.pageModules}/${fileName}';`;
+        const fileName = path.basename(file.path, '.js');
+        const pageModuleExportString = `export {default as ${escapeFilename(fileName)}} from '${paths.pageModules}/${fileName}';`;
 
         file.contents = Buffer.concat([
           new Buffer(pageModuleExportString),

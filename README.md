@@ -8,3 +8,6 @@ Sugarcone is a gulp utility for easy, isomorphic Dust.js templating.
 
 ## Usage
 Todo: Add documentation and improve ease of use.
+
+## NPM
+https://www.npmjs.com/package/@erchaves/sugarcone
