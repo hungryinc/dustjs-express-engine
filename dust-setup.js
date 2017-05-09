@@ -33,7 +33,7 @@ var setup = function(dust, isDebug) {
 
     // wrap the existing log function to provide more detail and also log on the front end.
     dust.log = function(msg, level) {
-      logger(`[DUST:${level}]: ${msg}`);
+      logger('[DUST:' + level + ']: ' + msg);
       dustLog.apply(this, arguments);
     };
   }

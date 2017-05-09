@@ -33,11 +33,11 @@ module.exports = function(options) {
   const globs = {
     views: getDustGlob(paths.views),
     partials: getDustGlob(paths.partials),
-    pageModules: `${paths.pageModules}/*.js`,
+    pageModules: paths.pageModules + '/*.js',
   };
 
   const getDustExpressHeader = function() {
-    return `const _config = {"isDebug": ${isDebug}, "dustSetupPath": '${paths.dustSetup}', }`;
+    return 'const _config = {"isDebug": ' + isDebug + ', "dustSetupPath": "' + paths.dustSetup + '", }';
   };
 
   // Read the pages directory and create a dictionary of pageModules.
@@ -45,7 +45,7 @@ module.exports = function(options) {
     return gulp.src(globs.pageModules)
       .pipe(tap(function(file) {
         const fileName = path.basename(file.path, '.js');
-        const pageModuleExportString = `export {default as ${utils.escapeFilename(fileName)}} from '${paths.pageModules}/${fileName}';`;
+        const pageModuleExportString = 'export {default as ' + utils.escapeFilename(fileName) + '} from "' + paths.pageModules + '/' + fileName + '";';
 
         file.contents = Buffer.concat([
           new Buffer(pageModuleExportString),
@@ -58,7 +58,7 @@ module.exports = function(options) {
   const getDustPartials = function () {
     return gulp.src(globs.partials)
       .pipe(dust({
-        name: file => {
+        name: function(file) {
           // get the path relative to the views folder root
           var relPath = path.relative(paths.views, file.path);
           // strip ext
@@ -76,7 +76,7 @@ module.exports = function(options) {
     const dustPartials = getDustPartials();
 
     return streamSeries(dustSrc, dustSetup, dustPartials)
-      .pipe(concat(`${dustBuildFileName}.js`))
+      .pipe(concat(dustBuildFileName + '.js'))
       .pipe(gulp.dest(paths.sugarconeDist));
   };
 
