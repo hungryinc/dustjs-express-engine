@@ -4,8 +4,7 @@ const dust = require('gulp-dust');
 const tap = require('gulp-tap');
 const path = require('path');
 const streamSeries = require('stream-series');
-const escapeFilename = require('./utils').escapeFilename;
-
+const utils = require('./utils');
 const fileExtRegex = /\.[^/.]+$/;
 
 // todo: is there a nicer way to get this?
@@ -28,7 +27,7 @@ module.exports = function(options) {
     pageModules: options.pathPageModules,
     views: pathViews,
     dist: pathDist,
-    sugarconeDist: path.join(pathDist, 'sugarcone'),
+    sugarconeDist: utils.getPathSugarconeDist(pathDist),
   };
 
   const globs = {
@@ -46,7 +45,7 @@ module.exports = function(options) {
     return gulp.src(globs.pageModules)
       .pipe(tap(function(file) {
         const fileName = path.basename(file.path, '.js');
-        const pageModuleExportString = `export {default as ${escapeFilename(fileName)}} from '${paths.pageModules}/${fileName}';`;
+        const pageModuleExportString = `export {default as ${utils.escapeFilename(fileName)}} from '${paths.pageModules}/${fileName}';`;
 
         file.contents = Buffer.concat([
           new Buffer(pageModuleExportString),
