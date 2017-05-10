@@ -2,6 +2,7 @@ const logger = (console && console.log) || function() {
   // noop. No console available.
 };
 
+// todo: replace these dummy examples with settings passed in
 var dustFilters = {
   addOneAndZeroFill: function(val) {
     return ('00' + (val + 1)).slice(-2);
