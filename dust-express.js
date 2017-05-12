@@ -1,6 +1,6 @@
 // this header will get written to _config by gulp
 const config = _config || {
-  isDebug: true,
+  isDebug: null,
   dustSetupPath: '',
   dustExtensionsPath: '',
 };
@@ -13,6 +13,12 @@ const dustExtensions = config.dustExtensionsPath ? require(config.dustExtensions
 const dustOptions = {
   helpers: [
     function (dust) {
+
+      if (config.isDebug) {
+        // set the debug flag.
+        dust.debugLevel = 'DEBUG';
+      }
+
       if (dustExtensions) {
         dust = dustExtensions(dust);
       }

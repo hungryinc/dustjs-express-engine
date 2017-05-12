@@ -1,4 +1,8 @@
 const dustSetup = function(dust) {
+  const logger = (console && console.log) || function() {
+    // noop. No console available.
+  };
+
   var dustLog = dust.log;
   var isDebug = dust.debugLevel === 'DEBUG';
 
