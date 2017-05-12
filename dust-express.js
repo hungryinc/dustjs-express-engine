@@ -2,16 +2,22 @@
 const config = _config || {
   isDebug: true,
   dustSetupPath: '',
+  dustExtensionsPath: '',
 };
 
 const path = require('path');
 const adaroDust = require('adaro');
 const dustSetup = require(config.dustSetupPath);
+const dustExtensions = config.dustExtensionsPath ? require(config.dustExtensionsPath) : null;
 
 const dustOptions = {
   helpers: [
     function (dust) {
-      dustSetup(dust, config.isDebug);
+      if (dustExtensions) {
+        dust = dustExtensions(dust);
+      }
+
+      dustSetup(dust);
     },
   ],
   // todo: not sure if this setting is actually getting passed through...

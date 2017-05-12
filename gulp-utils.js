@@ -22,6 +22,7 @@ module.exports = function(options) {
 
   const paths = {
     dust: pathDust,
+    dustExtensions: options.dustExtensions || null,
     dustSetup: path.join(__dirname, 'dust-setup.js'),
     partials: path.join(pathViews, options.pathRelPartials),
     pageModules: options.pathPageModules,
@@ -37,7 +38,12 @@ module.exports = function(options) {
   };
 
   const getDustExpressHeader = function() {
-    return 'const _config = {"isDebug": ' + isDebug + ', "dustSetupPath": "' + paths.dustSetup + '", }';
+    // this is a messy way to do this. Consider a better way
+    const isDebugStr =  '"isDebug": ' + isDebug + ', ';
+    const dustExtensionsStr = paths.dustExtensions ? '"dustExtensionsPath": "' + paths.dustExtensions + '", ' : '';
+    const dustSetupStr =  '"dustSetupPath": "' + paths.dustSetup + '", ';
+
+    return 'const _config = {' + isDebugStr + dustSetupStr + dustExtensionsStr + ' }';
   };
 
   // Read the pages directory and create a dictionary of pageModules.
@@ -70,12 +76,57 @@ module.exports = function(options) {
       }));
   };
 
+
+  const getDustExtensionsStream = function (path) {
+    if (!path) {
+      return null;
+    }
+
+    return gulp.src(path).pipe(tap(function(file, t) {
+      const requiredFunc = require(file.path);
+
+      file.contents = Buffer.concat([
+        new Buffer(getWrappedDustFuncString(requiredFunc))
+      ]);
+    }));
+  };
+
+  const getWrappedDustFuncString = function (func) {
+    return '(' + func.toString() + ')(dust);\n';
+  };
+
+  const prefixDustSetup = function (fileContentsArr, isDebug, pathDustExtensions) {
+    if (pathDustExtensions) {
+      // If there are dustExtensions, add them in
+      fileContentsArr.unshift(new Buffer(
+        getWrappedDustFuncString(require(pathDustExtensions)))
+      );
+    }
+
+    if (isDebug) {
+      fileContentsArr.unshift(
+        // set the debug property at the top (unshifting last)
+        new Buffer(getWrappedDustFuncString(function(dust) {
+          dust.debugLevel = 'DEBUG';
+        }))
+      );
+    }
+
+    return fileContentsArr;
+  };
+
   const taskDustBuild = function () {
-    const dustSetup = gulp.src(paths.dustSetup);
     const dustSrc = gulp.src(paths.dust);
     const dustPartials = getDustPartials();
+    const dustSetup = gulp.src(paths.dustSetup).pipe(tap(function(file, t) {
+      var fileContentsArr = [file.contents];
 
-    return streamSeries(dustSrc, dustSetup, dustPartials)
+      prefixDustSetup(fileContentsArr, isDebug, paths.dustExtensions);
+
+      file.contents = Buffer.concat(fileContentsArr);
+    }));
+
+    return streamSeries(dustSrc, dustPartials, dustSetup)
       .pipe(concat(dustBuildFileName + '.js'))
       .pipe(gulp.dest(paths.sugarconeDist));
   };
@@ -85,9 +136,9 @@ module.exports = function(options) {
 
     return gulp.src(path.join(__dirname, 'dust-express.js'))
       .pipe(tap(function(file, t) {
-          file.contents = Buffer.concat([
-            new Buffer(header),
-            file.contents
+        file.contents = Buffer.concat([
+          new Buffer(header),
+          file.contents
         ]);
       }))
       .pipe(concat('dust-express.js'))
