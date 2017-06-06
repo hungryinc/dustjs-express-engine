@@ -1,8 +1,7 @@
-module.exports = function (App) {
-  const app = new App(window.appData);
+module.exports = function (App, _appData) {
+  // todo: keep window.appData as a fallback until the next breaking change update
+  const appData = _appData || window.appData || {};
+  const app = new App(appData);
 
   window.onload = app.init.bind(app);
-
-  // temp - expose the app instance to the window object
-  window.app = app;
 };
