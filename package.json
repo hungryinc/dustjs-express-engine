@@ -1,7 +1,7 @@
 {
   "name": "@hungryinc/dustjs-express-engine",
   "description": "A gulp utility for isomorphic Dust.js rendering. Bundles your templates, partials, helpers, and filters. Universal rendering on the Express.js server and the client.",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "author": "Eric Chaves <eric@hungryinc.com>",
   "license": "MIT",
   "dependencies": {
