@@ -7,15 +7,15 @@ const escapeFilename = function (str) {
 };
 
 const getPathDustExpress = function (pathDist) {
-  return path.join(getPathSugarconeDist(pathDist), 'dust-express');
+  return path.join(getPathDistSubdirectory(pathDist), 'dust-express');
 };
 
-const getPathSugarconeDist = function (pathDist) {
-  return path.join(pathDist, 'sugarcone');
+const getPathDistSubdirectory = function (pathDist) {
+  return path.join(pathDist, 'dustjs-express-engine');
 };
 
 module.exports = {
   escapeFilename: escapeFilename,
   getPathDustExpress: getPathDustExpress,
-  getPathSugarconeDist: getPathSugarconeDist,
+  getPathDistSubdirectory: getPathDistSubdirectory,
 };

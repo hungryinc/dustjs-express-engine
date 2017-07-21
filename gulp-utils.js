@@ -28,7 +28,7 @@ module.exports = function(options) {
     pageModules: options.pathPageModules,
     views: pathViews,
     dist: pathDist,
-    sugarconeDist: utils.getPathSugarconeDist(pathDist),
+    dustExpressEngineDist: utils.getPathDistSubdirectory(pathDist),
   };
 
   const globs = {
@@ -58,7 +58,7 @@ module.exports = function(options) {
         ]);
       }))
       .pipe(concat('page-module-index.js'))
-      .pipe(gulp.dest(paths.sugarconeDist));
+      .pipe(gulp.dest(paths.dustExpressEngineDist));
   };
 
   const getDustPartials = function () {
@@ -128,7 +128,7 @@ module.exports = function(options) {
 
     return streamSeries(dustSrc, dustPartials, dustSetup)
       .pipe(concat(dustBuildFileName + '.js'))
-      .pipe(gulp.dest(paths.sugarconeDist));
+      .pipe(gulp.dest(paths.dustExpressEngineDist));
   };
 
   const taskDustExpress = function () {
@@ -142,7 +142,7 @@ module.exports = function(options) {
         ]);
       }))
       .pipe(concat('dust-express.js'))
-      .pipe(gulp.dest(paths.sugarconeDist));
+      .pipe(gulp.dest(paths.dustExpressEngineDist));
   };
 
   const taskHtml = function () {
