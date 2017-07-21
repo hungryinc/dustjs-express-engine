@@ -1,8 +1,8 @@
 {
-  "name": "@erchaves/sugarcone",
-  "description": "A gulp utility for easy, isomorphic Dust.js. Bundles your templates, partials, helpers, and filters. Universal rendering on the Express.js server and the client.",
-  "version": "0.1.8",
-  "author": "Eric Chaves <erchaves@gmail.com>",
+  "name": "@hungryinc/dustjs-express-engine",
+  "description": "A gulp utility for isomorphic Dust.js rendering. Bundles your templates, partials, helpers, and filters. Universal rendering on the Express.js server and the client.",
+  "version": "0.1.9",
+  "author": "Eric Chaves <eric@hungryinc.com>",
   "license": "MIT",
   "dependencies": {
     "adaro": "^1.0.4",
@@ -14,11 +14,11 @@
     "stream-series": "^0.1.1"
   },
   "bugs": {
-    "url": "https://github.com/erchaves/sugarcone/issues"
+    "url": "https://github.com/hungryinc/dustjs-express-engine/issues"
   },
-  "homepage": "https://github.com/erchaves/sugarcone#readme",
+  "homepage": "https://github.com/hungryinc/dustjs-express-engine#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/erchaves/sugarcone"
+    "url": "git+https://github.com/hungryinc/dustjs-express-engine"
   }
 }
