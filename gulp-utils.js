@@ -4,6 +4,7 @@ const dust = require('gulp-dust');
 const tap = require('gulp-tap');
 const path = require('path');
 const streamSeries = require('stream-series');
+const merge = require('merge-stream');
 const utils = require('./utils');
 const fileExtRegex = /\.[^/.]+$/;
 
@@ -160,10 +161,12 @@ module.exports = function(options) {
   };
 
   const runTasks = function() {
-    taskPageModules();
-    taskDustBuild();
-    taskDustExpress();
-    taskHtml();
+    return merge(
+      taskPageModules(),
+      taskDustBuild(),
+      taskDustExpress(),
+      taskHtml()
+    );
   };
 
   return {
